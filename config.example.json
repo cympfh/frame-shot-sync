@@ -1,0 +1,14 @@
+{
+  "_説明": "frame-shot-sync の設定。項目の意味は docs/DEVELOPMENT.md",
+  "frame_host": "frame",
+  "frame_user": "steamos",
+  "key_path": "~/.ssh/id_ed25519_frame",
+  "dest": "",
+  "interval_minutes": 5,
+  "month_folders": true,
+  "sources": [
+    { "name": "steam", "path": "~/.local/share/Steam/userdata/*/760/remote/*/screenshots" },
+    { "name": "aux-shortcuts", "path": "~/Pictures/frame-aux-shortcuts" },
+    { "name": "spectacle", "path": "~/Pictures/Screenshots" }
+  ]
+}
