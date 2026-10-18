@@ -103,6 +103,7 @@ function Unique-Path([string]$path, [long]$size) {
 
 # ---------------------------------------------------------------- 1 回分の同期
 function Sync-Once {
+    $script:shown = 0
     $list = Get-RemoteList
     if (-not $list) { Log "Frame ($($cfg.frame_host)) につながりません。電源とネットワークを確認してください。次の回にまた試します。"; return }
     $new = @(); $waiting = 0
@@ -122,12 +123,17 @@ function Sync-Once {
         if ($cfg.month_folders) { $dir = Join-Path $dir ($when.ToString("yyyy-MM")) }
         $name = [IO.Path]::GetFileName($f.p)
         $r = Unique-Path (Join-Path $dir $name) ([long]$f.s)
-        if ($DryRun) { Log "  (DryRun) $($f.p) -> $($r[0])"; continue }
+        if ($DryRun) {
+            $script:shown++
+            if ($script:shown -le 20) { Log "  (DryRun) $($f.p) -> $($r[0])" }
+            continue
+        }
         if ($r[1]) { Add-State $f.p $f.s $r[0]; Log "  すでにあります: $($r[0])"; continue }
         if (-not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
         $jobs += [pscustomobject]@{ remote = $f.p; size = [long]$f.s; local = $r[0]; part = "$($r[0]).part" }
     }
-    if ($DryRun -or -not $jobs.Count) { return }
+    if ($DryRun) { if ($new.Count -gt 20) { Log "  （ほか $($new.Count - 20) 個）" }; return }
+    if (-not $jobs.Count) { return }
 
     # sftp 1 本でまとめて取ってくる（-p で撮影時刻を保つ）。いったん .part に保存し、サイズが合ったら本来の名前にする
     $batch = Join-Path $env:TEMP "frame-shot-sync-batch.txt"
