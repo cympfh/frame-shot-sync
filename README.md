@@ -38,7 +38,7 @@ powershell -ExecutionPolicy Bypass -File "$env:LOCALAPPDATA\frame-shot-sync\fram
 ## アンインストール
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/cympfh/frame-shot-sync/main/install.ps1))) -Uninstall
+irm https://raw.githubusercontent.com/cympfh/frame-shot-sync/main/uninstall.ps1 | iex
 ```
 
 外したファイルは消さずに `%LOCALAPPDATA%\frame-shot-sync-uninstalled\` へ移します。設定ファイルとコピー済みの写真は残ります。

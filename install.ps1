@@ -2,7 +2,7 @@
 # frame-shot-sync (Windows) installer. User space only, no admin, no autostart.
 #   irm https://raw.githubusercontent.com/cympfh/frame-shot-sync/main/install.ps1 | iex
 # Uninstall (moves files aside; config is kept):
-#   & ([scriptblock]::Create((irm https://raw.githubusercontent.com/cympfh/frame-shot-sync/main/install.ps1))) -Uninstall
+#   irm https://raw.githubusercontent.com/cympfh/frame-shot-sync/main/uninstall.ps1 | iex
 param([switch]$Uninstall)
 $ErrorActionPreference = "Stop"
 $repo = "cympfh/frame-shot-sync"
